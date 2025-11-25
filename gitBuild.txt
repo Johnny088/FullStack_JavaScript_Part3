@@ -1,0 +1,11 @@
+1) npm init -y                  Project initialization / making package.json
+
+2) npm install --save-dev gulp                    intaling gulp local version / apearing package-lock.json
+
+3) Then we need to create gulpfile.js             and set up it
+
+4) then need to add some instructions to the package.json
+
+5) then need to create the structure of the folders and index.html into the src folder
+
+6) when all folders are created you need to do  "npm i" or "npm install"
