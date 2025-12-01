@@ -1,8 +1,6 @@
 //Створіть функцію `getRandomInt`, яка приймає два цілих числа: `min` та `max`. Ця функція повинна генерувати випадкове ціле число в діапазоні від `min` до `max` (включно).
 function getRandomInt(min, max) {
-  return `your random number in range from ${min} to ${max} is: ${Math.floor(
-    Math.random() * (max - min + 1) + min
-  )}`;
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 console.log(getRandomInt(0, 1));
 console.log(getRandomInt(1, 10));
