@@ -9,7 +9,7 @@ console.log(getRandomInt(1, 100));
 
 // Ваше завдання - створити функцію greet в JavaScript.
 function greetByName(msg, name) {
-  return msg + ', ' + name;
+  return `${msg}, ${name}`;
 }
 console.log(greetByName('hi', 'testName'));
 console.log(greetByName('hey', 'testName'));
