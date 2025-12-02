@@ -25,7 +25,7 @@ function totalCheck() {
     }
   }
 }
-//totalCheck();
+totalCheck();
 
 // -------------------------------task2
 function checkMiddle() {
