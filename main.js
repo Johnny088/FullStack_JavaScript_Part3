@@ -18,7 +18,7 @@ function totalCheck() {
     } else {
       const persentage = (tips * checkSum) / 100;
       alert(
-        `Check summ ${checkSum} \nTip amount: ${tips} \nTotal sum to pay: ${
+        `Check summ ${checkSum} \nTip amount: ${tips}% \nTotal sum to pay: ${
           checkSum + persentage
         }`
       );
