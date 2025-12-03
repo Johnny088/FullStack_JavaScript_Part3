@@ -1,4 +1,2 @@
-body {
-  background: linear-gradient(to right, #1c0c00, #1c0700, #140900, #1c0c00);
-  // background-color: aqua;
-}
+@use 'base';
+@use 'layouts';

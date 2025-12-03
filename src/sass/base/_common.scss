@@ -1,14 +1,8 @@
 body {
   background: linear-gradient(to right, #1c0c00, #1c0700, #140900, #1c0c00);
+  // background-color: aqua;
 }
-
 .container {
   padding: 0 20px;
   margin: 0 auto;
-}
-
-header .container {
-  width: 374px;
-  display: flex;
-  justify-content: space-between;
 }
