@@ -11,9 +11,7 @@ function totalCheck() {
   //   --------------------------------
   if (checkSum != 0) {
     tips = Number(prompt(`type your tip amount:`));
-    if (tips === 0) {
-      console.log(`tips were canceled`);
-    } else if (Number(tips == NaN) || tips < 0 || tips > 100) {
+    if (isNaN(tips) || tips < 0 || tips > 100) {
       alert('invalid input data');
     } else {
       const persentage = (tips * checkSum) / 100;
@@ -51,4 +49,4 @@ function checkMiddle() {
     }
   }
 }
-checkMiddle();
+//checkMiddle();
