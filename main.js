@@ -3,7 +3,7 @@ function totalCheck() {
   let checkSum = Number(prompt(`type your check amount:`));
   let tips;
   if (checkSum === 0) {
-    console.log(`canceled`);
+    alert(`canceled`);
   } else if (isNaN(checkSum) || checkSum < 0) {
     alert('invalid input data');
     checkSum = 0;
