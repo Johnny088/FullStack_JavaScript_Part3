@@ -49,4 +49,4 @@ function checkMiddle() {
     }
   }
 }
-//checkMiddle();
+checkMiddle();
