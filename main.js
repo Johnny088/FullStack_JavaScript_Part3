@@ -4,6 +4,7 @@ function totalCheck() {
   let tips;
   if (checkSum === 0) {
     alert(`canceled`);
+    alert(checkSum);
   } else if (isNaN(checkSum) || checkSum < 0) {
     alert('invalid input data');
     checkSum = 0;
@@ -23,7 +24,7 @@ function totalCheck() {
     }
   }
 }
-totalCheck();
+//totalCheck();
 
 // -------------------------------task2
 function checkMiddle() {
@@ -40,12 +41,10 @@ function checkMiddle() {
     countLength = check.length;
     if (countLength % 2 == 0) {
       middle = countLength / 2 - 1;
-      console.log(check);
-      alert(check.slice(middle, middle + 2));
+      alert(`Word: ${check} \nResult: ${check.slice(middle, middle + 2)}`);
     } else {
       middle = Math.floor(countLength / 2);
-      console.log(check);
-      alert(check[middle]);
+      alert(`Word: ${check} \nResult: ${check[middle]}`);
     }
   }
 }
