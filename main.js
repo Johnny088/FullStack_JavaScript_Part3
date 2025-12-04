@@ -5,26 +5,31 @@ function totalCheck() {
     alert(`canceled`);
   } else {
     let checkSum = Number(tempSum);
-    let tips;
+    let tip;
     if (isNaN(checkSum) || checkSum < 0) {
       alert('invalid input data');
     } else {
-      tips = Number(prompt(`type your tip amount:`));
-      if (isNaN(tips) || tips < 0 || tips > 100) {
-        alert('invalid input data');
+      tip = prompt(`type your tip amount:`);
+      if (tip === null) {
+        alert(`canceled`);
       } else {
-        const persentage = (tips * checkSum) / 100;
-        alert(
-          `Check summ ${checkSum} \nTip amount: ${tips}% \nTotal sum to pay: ${
-            checkSum + persentage
-          }`
-        );
+        const tips = Number(tip);
+        if (isNaN(tips) || tips < 0 || tips > 100) {
+          alert('invalid input data');
+        } else {
+          const persentage = (tips * checkSum) / 100;
+          alert(
+            `Check summ ${checkSum} \nTip amount: ${tips}% \nTotal sum to pay: ${
+              checkSum + persentage
+            }`
+          );
+        }
       }
     }
   }
 }
 
-//totalCheck();
+totalCheck();
 
 // -------------------------------task2
 function checkMiddle() {
@@ -39,7 +44,7 @@ function checkMiddle() {
   } else {
     check = yourWord.trim();
     if (check.includes(' ')) {
-      alert('the word has space');
+      alert('invalid input data');
     } else {
       countLength = check.length;
       if (countLength % 2 == 0) {
