@@ -1,29 +1,29 @@
 //task1
 function totalCheck() {
-  let checkSum = Number(prompt(`type your check amount:`));
-  let tips;
-  if (checkSum === 0) {
+  const tempSum = prompt(`type your check amount:`);
+  if (tempSum === null) {
     alert(`canceled`);
-    alert(checkSum);
-  } else if (isNaN(checkSum) || checkSum < 0) {
-    alert('invalid input data');
-    checkSum = 0;
-  }
-  //   --------------------------------
-  if (checkSum != 0) {
-    tips = Number(prompt(`type your tip amount:`));
-    if (isNaN(tips) || tips < 0 || tips > 100) {
+  } else {
+    let checkSum = Number(tempSum);
+    let tips;
+    if (isNaN(checkSum) || checkSum < 0) {
       alert('invalid input data');
     } else {
-      const persentage = (tips * checkSum) / 100;
-      alert(
-        `Check summ ${checkSum} \nTip amount: ${tips}% \nTotal sum to pay: ${
-          checkSum + persentage
-        }`
-      );
+      tips = Number(prompt(`type your tip amount:`));
+      if (isNaN(tips) || tips < 0 || tips > 100) {
+        alert('invalid input data');
+      } else {
+        const persentage = (tips * checkSum) / 100;
+        alert(
+          `Check summ ${checkSum} \nTip amount: ${tips}% \nTotal sum to pay: ${
+            checkSum + persentage
+          }`
+        );
+      }
     }
   }
 }
+
 //totalCheck();
 
 // -------------------------------task2
@@ -38,13 +38,17 @@ function checkMiddle() {
     alert('invalid input data');
   } else {
     check = yourWord.trim();
-    countLength = check.length;
-    if (countLength % 2 == 0) {
-      middle = countLength / 2 - 1;
-      alert(`Word: ${check} \nResult: ${check.slice(middle, middle + 2)}`);
+    if (check.includes(' ')) {
+      alert('the word has space');
     } else {
-      middle = Math.floor(countLength / 2);
-      alert(`Word: ${check} \nResult: ${check[middle]}`);
+      countLength = check.length;
+      if (countLength % 2 == 0) {
+        middle = countLength / 2 - 1;
+        alert(`Word: ${check} \nResult: ${check.slice(middle, middle + 2)}`);
+      } else {
+        middle = Math.floor(countLength / 2);
+        alert(`Word: ${check} \nResult: ${check[middle]}`);
+      }
     }
   }
 }
