@@ -14,7 +14,7 @@ console.log(`positive numbers: ${counterPositive}`);
 //Дано масив:
 //[1, 4, 7, 10, 13, 16]
 const arr2 = [1, 4, 7, 10, 13, 16];
-evenArr = [];
+const evenArr = [];
 
 for (let i = 0; i < arr2.length; i += 1) {
   if (arr2[i] % 2 == 0) {
@@ -52,7 +52,9 @@ if (string4.includes('green')) {
 //[4, 0, 5, 0, 2]
 let arr5 = [4, 0, 5, 0, 2];
 const index = arr5.indexOf(0);
-arr5.splice(index, 1);
+if (index != -1) {
+  arr5.splice(index, 1);
+}
 console.log(`task5 ==> ${arr5}`);
 
 //6. Перетворити масив слів у рядок через кому.
@@ -60,16 +62,30 @@ console.log(`task5 ==> ${arr5}`);
 //["apple", "banana", "pear"]
 //Створіть рядок "apple, banana, pear" використовуючи цикл.
 const string6 = ['apple', 'banana', 'pear'];
-const temp6 = string6.join(', ');
-console.log(`task6 ==> ${temp6}`);
+let temp6 = '';
+for (let i = 0; i < string6.length; i += 1) {
+  temp6 += string6[i];
+  if (i < string6.length - 1) {
+    temp6 += ', ';
+  }
+}
+console.log(temp6);
+
+// const temp6 = string6.join(', ');
+// console.log(`task6 ==> ${temp6}`);
 
 //7. Знайти мінімальне число в масиві.
 //Дано масив:
 //[9, 2, 14, -5, 7]
 //Знайдіть найменший елемент без використання Math.min.
 const arr7 = [9, 2, 14, -5, 7];
-const min = Math.min(...arr7);
-console.log(`min: ${min}`);
+let min = arr7[0];
+for (let i = 0; i < arr7.length; i += 1) {
+  if (min > arr7[i]) {
+    min = arr7[i];
+  }
+}
+console.log(min);
 
 //8. Порахувати кількість входжень заданого елемента.
 //Дано масив:
