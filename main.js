@@ -16,11 +16,7 @@ console.log(userObj.fullName());
 // task 3 ==========================================
 
 const defUpperStr = function (text = null) {
-  if (text) {
-    return text.toUpperCase();
-  } else {
-    return 'DEFAULT TEXT';
-  }
+  return (text || 'default text').toUpperCase();
 };
 console.log(defUpperStr('text'));
 console.log(defUpperStr());
@@ -67,7 +63,7 @@ const weekFn = function (day) {
       break;
 
     default:
-      return 'null';
+      return null;
       break;
   }
 };
