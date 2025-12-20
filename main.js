@@ -55,9 +55,8 @@ const items = [
 ];
 
 const newPrices = items.map(item => {
-  const persentage = item.price * 0.15;
-  item.price += persentage;
-  return item;
+  const persentage = item.price + item.price * 0.15;
+  return persentage;
 });
 
 console.log(newPrices);
