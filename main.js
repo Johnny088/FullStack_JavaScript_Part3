@@ -13,6 +13,8 @@ const totalSalary = users.reduce((acc, item) => {
 }, 0);
 console.log(`total sum is:  ${totalSalary}`);
 
+//------------------- task 2 (total active salary sum) -------------------------
+
 const activeSalary = users
   .filter(item => item.active === true)
   .reduce((acc, item) => {
@@ -20,3 +22,47 @@ const activeSalary = users
     return acc;
   }, 0);
 console.log(`total sum of active employees is:  ${activeSalary}`);
+
+//------------------- task 3 (number of the elements) -------------------------
+
+const capacity = users.reduce((acc, item) => {
+  acc += 1;
+  return acc;
+}, 0);
+
+console.log(`number of the elements of the array is ${capacity}`);
+
+//------------------- task 4 (the average age) -------------------------
+
+let averageAge = users.reduce((acc, item) => {
+  acc += item.age;
+  return acc;
+}, 0);
+
+averageAge = averageAge / capacity;
+console.log(`the average age of the students is: ${averageAge}`);
+
+//------------------- task 5  -------------------------
+
+const nameById = users.reduce((acc, item) => {
+  const newId = item.id;
+  acc[item.id] = item.name;
+  return acc;
+}, {});
+console.log(nameById);
+
+//------------------- task 5  -------------------------
+
+const usersState = users.reduce(
+  (acc, item) => {
+    if (item.active === true) {
+      acc.active += 1;
+    } else {
+      acc.passive += 1;
+    }
+    return acc;
+  },
+  { active: 0, passive: 0 }
+);
+
+console.log(usersState);
