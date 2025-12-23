@@ -51,7 +51,7 @@ const nameById = users.reduce((acc, item) => {
 }, {});
 console.log(nameById);
 
-//------------------- task 5  -------------------------
+//------------------- task 6  -------------------------
 
 const usersState = users.reduce(
   (acc, item) => {
@@ -66,3 +66,81 @@ const usersState = users.reduce(
 );
 
 console.log(usersState);
+
+//------------------- task 7  -------------------------
+
+const maxSalary = users.reduce((acc, item) => {
+  if (item.salary > acc) {
+    acc = item.salary;
+  }
+  return acc;
+}, 0);
+
+console.log(`max salary is: ${maxSalary}`);
+
+//------------------- task 8  -------------------------
+const salaryByGroup = users.reduce(
+  (acc, item) => {
+    if (item.age >= 30) {
+      acc.adult += item.salary;
+    } else {
+      acc.young += item.salary;
+    }
+    return acc;
+  },
+  { young: 0, adult: 0 }
+);
+
+console.log(salaryByGroup);
+
+//------------------- task 9  -------------------------
+
+const length = users.reduce((acc, item) => {
+  const tempLength = item.name.length;
+  acc.push(tempLength);
+  return acc;
+}, []);
+
+console.log(length);
+
+//------------------- task 10  -------------------------
+
+const stringArr = users.reduce((acc, item) => {
+  const stringTemp = `${item.name} (${item.salary})`;
+  acc.push(stringTemp);
+  return acc;
+}, []);
+
+console.log(stringArr);
+
+//------------------- task 11  -------------------------
+
+const activeTotalSalary = users.reduce((acc, item) => {
+  if (item.active === true) {
+    acc += item.salary;
+  }
+  return acc;
+}, 0);
+
+console.log(activeTotalSalary);
+
+//------------------- task 12  -------------------------
+
+const isActive = users.every(item => item.active === true);
+console.log(isActive);
+
+//------------------- task 13  -------------------------
+
+const ageFilter = users.every(item => item.age > 18);
+console.log(ageFilter);
+
+//------------------- task 14  -------------------------
+
+const sortedArray = users.toSorted((a, b) => a.age - b.age);
+console.log(sortedArray);
+
+//------------------- task 15  -------------------------
+const descActiveSort = users
+  .filter(item => item.active === true)
+  .toSorted((a, b) => b.salary - a.salary);
+console.log(descActiveSort);
