@@ -70,13 +70,14 @@ console.log(usersState);
 //------------------- task 7  -------------------------
 
 const maxSalary = users.reduce((acc, item) => {
-  if (item.salary > acc) {
-    acc = item.salary;
+  if (item.salary > acc.salary) {
+    acc = item;
   }
   return acc;
-}, 0);
+}, users[0]);
 
-console.log(`max salary is: ${maxSalary}`);
+console.log('task7');
+console.log(maxSalary);
 
 //------------------- task 8  -------------------------
 const salaryByGroup = users.reduce(
@@ -95,12 +96,14 @@ console.log(salaryByGroup);
 
 //------------------- task 9  -------------------------
 
-const length = users.reduce((acc, item) => {
-  const tempLength = item.name.length;
-  acc.push(tempLength);
-  return acc;
-}, []);
-
+const length = users
+  .filter(item => item.active === true)
+  .reduce((acc, item) => {
+    const tempLength = item.name.length;
+    acc.push(tempLength);
+    return acc;
+  }, []);
+console.log('task9');
 console.log(length);
 
 //------------------- task 10  -------------------------
@@ -131,7 +134,8 @@ console.log(isActive);
 
 //------------------- task 13  -------------------------
 
-const ageFilter = users.every(item => item.age > 18);
+const ageFilter = users.every(item => item.age >= 18);
+console.log('task13');
 console.log(ageFilter);
 
 //------------------- task 14  -------------------------
