@@ -140,9 +140,14 @@ class User {
 console.log('task4');
 const user1 = new User('Johnny', 'Johnny@gmail.com');
 const user2 = new User('Bob', 'Bob@gmail.com');
-user1.addOrder(prod1);
-user1.addOrder(prod2);
-user1.addOrder(prod3);
+const order2 = new Order();
+const order3 = new Order();
+order2.addProduct(prod2);
+order3.addProduct(prod3);
+order3.addProduct(prod1);
+user1.addOrder(order1);
+user1.addOrder(order2);
+user1.addOrder(order3);
 console.log(user1.getOrderCount());
 console.log(user1.listOrders());
 console.log(user1.lastOrder);
