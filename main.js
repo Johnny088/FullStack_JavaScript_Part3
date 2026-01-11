@@ -103,7 +103,7 @@ class PremiumOrder extends Order {
     return total;
   }
 }
-premiumOrder = new PremiumOrder(15);
+const premiumOrder = new PremiumOrder(15);
 premiumOrder.addProduct(prod1);
 premiumOrder.addProduct(prod2);
 premiumOrder.addProduct(prod3);
@@ -128,7 +128,7 @@ class User {
     return this.#orders.length;
   }
   listOrders() {
-    return this.#orders;
+    return this.#orders.map(order => order.summary);
   }
   get lastOrder() {
     if (this.#orders.length === 0) {
