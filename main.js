@@ -3,10 +3,10 @@ class Product {
   _price;
   category;
   #id;
-  constructor({ name, price, category }) {
+  constructor({ name, category, price }) {
     this.name = name;
-    this._price = price;
     this.category = category;
+    this.price = price;
     this.#id = Product.productGeneratId();
   }
   static productCounter = 0;
@@ -14,7 +14,10 @@ class Product {
     return (Product.productCounter += 1);
   }
   get info() {
-    return `${this.name}|${this.category}|${this._price}$`;
+    return `${this.name}|${this.category}|${this.price}$`;
+  }
+  get price() {
+    return this._price;
   }
   set price(newPrice) {
     if (newPrice < 0 || Number.isNaN(newPrice)) {
@@ -43,6 +46,7 @@ const prod3 = new Product({
 console.log(prod1);
 console.log(prod1.info);
 console.log((prod1.price = -1000));
+console.log(prod1.info);
 console.log((prod1.price = '1000'));
 console.log(prod1.info);
 
@@ -61,7 +65,7 @@ class Order {
   }
   getTotalPrice() {
     return this.#products.reduce((acc, item) => {
-      acc += item._price;
+      acc += item.price;
       return acc;
     }, 0);
   }
