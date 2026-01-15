@@ -106,7 +106,7 @@ const addBook = () => {
     e.preventDefault();
     const title = form.bookTitle.value;
     const author = form.author.value;
-    const year = form.year.value;
+    const year = Number(form.year.value);
     const description = form.description.value;
     const id = books.reduce((acc, books) => Math.max(acc, books.id), 0) + 1;
     books.push({
