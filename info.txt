@@ -1,0 +1,14 @@
+jasmine
+open in integrated terminal
+npm init -y
+then we need npmjs.com. need to type and jasmin or jest and get the code to install it
+example "npm i jasmine" but we need to turn it into ==> npm i --save-dev jasmine
+npx jasmine init
+npx jasmine to start test
+
+jest
+npm init -y
+npm i --save-dev jest
+then in the package.json we need to change the meaning of hte scripts.test to "jest"
+npm test ==> to start the testdf
+to change common for module we need to fo smth)))
