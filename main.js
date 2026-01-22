@@ -96,7 +96,7 @@ const addBook = (descriptionDiv, list) => {
   form.classList.add('submitForm');
   form.innerHTML = `<input type="text" required placeholder="Title"  name="bookTitle"/>
       <input type="text" required placeholder="Author" name="author"/>
-      <input type="number" required placeholder="Year" name="year"/>
+      <input type="text" required placeholder="Year" name="year"/>
       <textarea type="text" required placeholder="Description" name="description" rows="5" cols="50"></textarea>
       <button>save</button>`;
   descriptionDiv.append(form);
