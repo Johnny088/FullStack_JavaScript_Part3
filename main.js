@@ -62,35 +62,33 @@ function startHtml() {
   addBtn.textContent = 'add new book';
   addBtn.classList.add('form_btn');
   container.append(list, descriptionDiv, addBtn);
+  bookHandler(descriptionDiv, list);
+  addHandler(descriptionDiv, list);
 }
 
 startHtml();
 
 // ----------------------------------------- button handler to describe books  ------------------------
-const bookHandler = () => {
-  const bookList = document.querySelector('.list');
-  const infoDiv = document.querySelector('.info');
-  bookList.addEventListener('click', e => {
+function bookHandler(descriptionDiv, list) {
+  list.addEventListener('click', e => {
     if (e.target.nodeName === 'BUTTON') {
       const id = Number(e.target.id);
       const { title, author, year, description } = books.find(
-        book => book.id === id
+        book => book.id === id,
       );
-      infoDiv.innerHTML = `<h3>${title}</h3> <p>${author}</p> <p>${year}</p> <p>${description}</p>`;
+      descriptionDiv.innerHTML = `<h3>${title}</h3> <p>${author}</p> <p>${year}</p> <p>${description}</p>`;
     }
   });
-};
-bookHandler();
+}
 
 // ----------------------------------lisntener for adding books ----------------------
-const addHandler = () => {
+function addHandler(descriptionDiv, list) {
   const addNewBook = document.querySelector('.form_btn');
-  addNewBook.addEventListener('click', () => addBook());
-};
-addHandler();
-// ----------------------------------------
-const addBook = () => {
-  root.innerHTML = '';
+  addNewBook.addEventListener('click', () => addBook(descriptionDiv, list));
+}
+// ---------------------------------------- Adding new book -------------------------
+const addBook = (descriptionDiv, list) => {
+  descriptionDiv.innerHTML = '';
   if (root.querySelector('form')) {
     return;
   }
@@ -101,24 +99,33 @@ const addBook = () => {
       <input type="number" required placeholder="Year" name="year"/>
       <textarea type="text" required placeholder="Description" name="description" rows="5" cols="50"></textarea>
       <button>save</button>`;
-  root.append(form);
+  descriptionDiv.append(form);
   form.addEventListener('submit', e => {
     e.preventDefault();
     const title = form.bookTitle.value;
     const author = form.author.value;
     const year = Number(form.year.value);
+    if (Number.isNaN(year) || year <= 0) {
+      alert('Year must be a number, and >= 0');
+      return;
+    }
     const description = form.description.value;
     const id = books.reduce((acc, books) => Math.max(acc, books.id), 0) + 1;
-    books.push({
+    const book = {
       id: id,
       title: title,
       author: author,
       year: year,
       description: description,
-    });
+    };
+    books.push(book);
+    renderNewBook(book, list);
     form.remove();
-    startHtml();
-    bookHandler();
-    addHandler();
   });
 };
+
+function renderNewBook(book, list) {
+  const item = document.createElement('li');
+  item.innerHTML = `<h3>${book.title}</h3><button id="${book.id}">view details</button>`;
+  list.append(item);
+}
