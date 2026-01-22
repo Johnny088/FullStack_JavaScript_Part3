@@ -1,1 +1,1 @@
-:root{--main-color: yellow}body{background-color:var(--main-color);font-size:16px}/*# sourceMappingURL=main.min.css.map */
+:root{--main-color: yellow}.container{width:430px;background:linear-gradient(90deg, #1c0c00, #1c0700, #140900, #1c0c00)}/*# sourceMappingURL=main.min.css.map */

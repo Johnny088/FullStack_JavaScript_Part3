@@ -2,7 +2,7 @@
   --main-color: yellow;
 }
 
-body {
-  background-color: var(--main-color);
-  font-size: 16px;
+.container {
+  width: 430px;
+  background: linear-gradient(90deg, #1c0c00, #1c0700, #140900, #1c0c00);
 }/*# sourceMappingURL=main.css.map */

@@ -1,4 +1,6 @@
 body {
-  background-color: var(--main-color);
-  font-size: $base_size;
+}
+.container {
+  width: 430px; //428
+  background: $main_color;
 }
