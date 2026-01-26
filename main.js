@@ -94,10 +94,10 @@ const addBook = (descriptionDiv, list) => {
   }
   const form = document.createElement('form');
   form.classList.add('submitForm');
-  form.innerHTML = `<input type="text" required placeholder="Title"  name="bookTitle"/>
-      <input type="text" required placeholder="Author" name="author"/>
-      <input type="text" required placeholder="Year" name="year"/>
-      <textarea type="text" required placeholder="Description" name="description" rows="5" cols="50"></textarea>
+  form.innerHTML = `<input type="text"  placeholder="Title"  name="bookTitle"/>
+      <input type="text"  placeholder="Author" name="author"/>
+      <input type="text"  placeholder="Year" name="year"/>
+      <textarea type="text" placeholder="Description" name="description" rows="5" cols="50"></textarea>
       <button>save</button>`;
   descriptionDiv.append(form);
   form.addEventListener('submit', e => {
@@ -105,11 +105,24 @@ const addBook = (descriptionDiv, list) => {
     const title = form.bookTitle.value;
     const author = form.author.value;
     const year = Number(form.year.value);
+    const description = form.description.value;
+    let error = '';
     if (Number.isNaN(year) || year <= 0) {
-      alert('Year must be a number, and >= 0');
+      error += '1) - Year must be a number, and >= 0\n';
+    }
+    if (!title) {
+      error += '2) - The title is requared\n';
+    }
+    if (!author) {
+      error += '3) - The author is requared\n';
+    }
+    if (!description) {
+      error += '3) - The description is requared';
+    }
+    if (error !== '') {
+      alert(error);
       return;
     }
-    const description = form.description.value;
     const id = books.reduce((acc, books) => Math.max(acc, books.id), 0) + 1;
     const book = {
       id: id,
