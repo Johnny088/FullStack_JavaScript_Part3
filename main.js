@@ -117,7 +117,7 @@ const addBook = (descriptionDiv, list) => {
       error += '3) - The author is requared\n';
     }
     if (!description) {
-      error += '3) - The description is requared';
+      error += '4) - The description is requared';
     }
     if (error !== '') {
       alert(error);
