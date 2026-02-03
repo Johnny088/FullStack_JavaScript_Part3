@@ -1,6 +1,13 @@
-const BASE_URL = `https://6971cf4a32c6bacb12c49096.mockapi.io/books`;
 const markupLi = (id, title) =>
-  `<li id="${id}"><h3>${title}</h3><button data-id="view">view details</button><button class="delete" data-id="del">delete</button></li>`;
+  `<li id="${id}"><h3>${title}</h3><button data-id="view">View details</button><button class="delete" data-id="del">Delete</button><button data-id="edit">Edit</button></li>`;
+const instance = axios.create({
+  baseURL: 'https://some-domain.com/api/',
+  timeout: 1000,
+  headers: { 'X-Custom-Header': 'foobar' },
+});
+const api = axios.create({
+  baseURL: `https://6971cf4a32c6bacb12c49096.mockapi.io/books`,
+});
 // -------------------------------render html-----------------------------------------
 const root = document.querySelector('#root');
 const list = document.createElement('ul');
@@ -16,39 +23,37 @@ addBtn.classList.add('form_btn');
 root.append(container);
 container.append(list, infoDiv, addBtn);
 // ---------------------------------- get Api data + Render books ---------------------------------
-function renderBooks() {
+async function renderBooks() {
   list.innerHTML = '<h2>Loading...</h2>';
-  fetch(BASE_URL)
-    .then(response => response.json())
-    .then(data => {
-      const books = data.map(({ id, title }) => markupLi(id, title)).join('');
-
-      list.innerHTML = books;
-    })
-    .catch(error => console.log(error));
+  try {
+    const { data } = await api();
+    const books = data.map(({ id, title }) => markupLi(id, title)).join('');
+    list.innerHTML = books;
+  } catch (error) {
+    console.log(error);
+  }
 }
 renderBooks();
 // -------------------------------------------------- deleting book -------------------
-const deleteBook = id => {
-  const options = {
-    method: 'DELETE',
-  };
-  fetch(`${BASE_URL}/${id}`, options)
-    .then(() => renderBooks())
-    .catch(error => console.log(error));
+const deleteBook = async id => {
+  try {
+    await api.delete(`/${id}`);
+    renderBooks();
+  } catch (error) {
+    console.log(error);
+  }
 };
 //---------------------------------------------------    get book by  id ---------------
-function getBookById(id, btn) {
-  fetch(`${BASE_URL}/${id}`)
-    .then(response => response.json())
-    .then(data => {
-      const { title, author, year, description } = data;
-      infoDiv.innerHTML = `<h3>${title}</h3> <p>${author}</p> <p>${year}</p> <p>${description}</p>`;
-    })
-    .catch(error => console.log(error))
-    .finally(() => {
-      btn.textContent = 'view details';
-    });
+async function getBookById(id, btn) {
+  try {
+    const { data } = await api(`/${id}`);
+    const { title, author, year, description } = data;
+    infoDiv.innerHTML = `<h3>${title}</h3> <p>${author}</p> <p>${year}</p> <p>${description}</p>`;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    btn.textContent = 'View details';
+  }
 }
 // -------------------------- adding listeners for view details and delete buttons --------------------------
 list.addEventListener('click', e => {
@@ -59,7 +64,7 @@ list.addEventListener('click', e => {
       const id = e.target.parentNode.id;
       getBookById(id, e.target);
     } else if (e.target.dataset.id === 'del') {
-      e.target.textContent = 'deleting...';
+      e.target.textContent = 'Deleting...';
       const id = e.target.parentNode.id;
       deleteBook(id);
 
@@ -67,6 +72,14 @@ list.addEventListener('click', e => {
         infoDiv.innerHTML = `<h2>the book was deleted</h2>`;
       }, 1000);
       setTimeout(() => (infoDiv.innerHTML = ''), 4000);
+    } else if (e.target.dataset.id === 'edit') {
+      e.target.textContent = 'Editing...';
+      const id = e.target.parentNode.id;
+      try {
+        editBook(id, e.target);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 });
@@ -76,13 +89,9 @@ addBtn.addEventListener('click', () => {
   if (root.querySelector('form')) {
     return;
   }
-  const form = document.createElement('form');
-  form.classList.add('submitForm');
-  form.innerHTML = `<input type="text" placeholder="Title"  name="bookTitle"/>
-    <input type="text" placeholder="Author" name="author"/>
-    <input type="text"  placeholder="Year" name="year"/>
-    <textarea type="text" placeholder="Description" name="description" rows="5" cols="50"></textarea>
-    <button class="save_btn">save</button>`;
+
+  const form = formHandler();
+
   infoDiv.append(form);
   newBookHandler(form);
 });
@@ -90,24 +99,13 @@ addBtn.addEventListener('click', () => {
 function newBookHandler(form) {
   form.addEventListener('submit', e => {
     e.preventDefault();
+    const year = Number(form.year.value);
     const title = form.bookTitle.value.trim();
     const author = form.author.value.trim();
-    const year = Number(form.year.value);
     const description = form.description.value.trim();
-    let error = '';
-    let n = 0;
-    if (Number.isNaN(year) || year <= 0 || !Number.isInteger(year)) {
-      error += `${(n += 1)}) - Year must be a number, and >= 0\n`;
-    }
-    if (!title) {
-      error += `${(n += 1)}) - The title is required\n`;
-    }
-    if (!author) {
-      error += `${(n += 1)}) - The author is required\n`;
-    }
-    if (!description) {
-      error += `${(n += 1)}) - The description is required`;
-    }
+
+    const error = validate(year, title, author, description);
+
     if (error !== '') {
       alert(error);
       return;
@@ -124,18 +122,88 @@ function newBookHandler(form) {
   });
 }
 
-function addToApi(newBook, form) {
-  const options = {
-    method: 'POST',
-    body: JSON.stringify(newBook),
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-  };
-  fetch(BASE_URL, options)
-    .then(() => {
-      form.remove();
-      renderBooks();
-    })
-    .catch(error => console.log(error));
+async function addToApi(newBook, form) {
+  try {
+    await api.post('', newBook);
+    form.remove();
+    renderBooks();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// -------------------------------- form -------------------
+function formHandler(title = '', author = '', year = '', description = '') {
+  const form = document.createElement('form');
+  form.classList.add('submitForm');
+  form.innerHTML = `<input type="text" placeholder="Title"  name="bookTitle" value="${title}"/>
+    <input type="text" placeholder="Author" name="author" value="${author}"/>
+    <input type="text"  placeholder="Year" name="year" value="${year}"/>
+    <textarea type="text" placeholder="Description" name="description" rows="5" cols="50">${description}</textarea>
+    <button class="save_btn">Save</button>`;
+  return form;
+}
+//-------------------------------validation---------------------------------
+function validate(year, title, author, description) {
+  let error = '';
+  let n = 0;
+  if (Number.isNaN(year) || year <= 0 || !Number.isInteger(year)) {
+    error += `${(n += 1)}) - Year must be a number, and >= 0\n`;
+  }
+  if (!title) {
+    error += `${(n += 1)}) - The title is required\n`;
+  }
+  if (!author) {
+    error += `${(n += 1)}) - The author is required\n`;
+  }
+  if (!description) {
+    error += `${(n += 1)}) - The description is required`;
+  }
+  return error;
+}
+// ----------------------------------------------- update ------------------------------------
+async function editBook(id, btn) {
+  const { data } = await api(`/${id}`);
+  const { title, author, year, description } = data;
+  const form = formHandler(title, author, year, description);
+  infoDiv.innerHTML = '';
+  infoDiv.append(form);
+  updateBookHandler(form, id, btn);
+}
+
+async function updateToApi(id, updatedBook, btn, form) {
+  try {
+    await api.put(`/${id}`, updatedBook);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    btn.textContent = 'Edit';
+    renderBooks();
+    form.remove();
+  }
+}
+
+function updateBookHandler(form, id, btn) {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    saveBtn = document.querySelector('.save_btn');
+    const year = Number(form.year.value);
+    const title = form.bookTitle.value.trim();
+    const author = form.author.value.trim();
+    const description = form.description.value.trim();
+    const error = validate(year, title, author, description);
+    if (error !== '') {
+      alert(error);
+      return;
+    }
+    saveBtn.textContent = 'saving....';
+    const updatedBook = {
+      title: title,
+      author: author,
+      year: year,
+      description: description,
+    };
+
+    updateToApi(id, updatedBook, btn, form);
+  });
 }
