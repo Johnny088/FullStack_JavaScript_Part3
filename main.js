@@ -26,7 +26,7 @@ container.append(list, infoDiv, addBtn);
 async function renderBooks() {
   list.innerHTML = '<h2>Loading...</h2>';
   try {
-    const { data } = await api();
+    const { data } = await api.get('/');
     const books = data.map(({ id, title }) => markupLi(id, title)).join('');
     list.innerHTML = books;
   } catch (error) {
@@ -46,7 +46,7 @@ const deleteBook = async id => {
 //---------------------------------------------------    get book by  id ---------------
 async function getBookById(id, btn) {
   try {
-    const { data } = await api(`/${id}`);
+    const { data } = await api.get(`/${id}`);
     const { title, author, year, description } = data;
     infoDiv.innerHTML = `<h3>${title}</h3> <p>${author}</p> <p>${year}</p> <p>${description}</p>`;
   } catch (error) {
@@ -110,7 +110,7 @@ function newBookHandler(form) {
       alert(error);
       return;
     }
-    saveBtn = document.querySelector('.save_btn');
+    const saveBtn = document.querySelector('.save_btn');
     saveBtn.textContent = 'saving....';
     const newBook = {
       title: title,
@@ -124,7 +124,7 @@ function newBookHandler(form) {
 
 async function addToApi(newBook, form) {
   try {
-    await api.post('', newBook);
+    await api.post('/', newBook);
     form.remove();
     renderBooks();
   } catch (error) {
@@ -163,12 +163,16 @@ function validate(year, title, author, description) {
 }
 // ----------------------------------------------- update ------------------------------------
 async function editBook(id, btn) {
-  const { data } = await api(`/${id}`);
-  const { title, author, year, description } = data;
-  const form = formHandler(title, author, year, description);
-  infoDiv.innerHTML = '';
-  infoDiv.append(form);
-  updateBookHandler(form, id, btn);
+  try {
+    const { data } = await api.get(`/${id}`);
+    const { title, author, year, description } = data;
+    const form = formHandler(title, author, year, description);
+    infoDiv.innerHTML = '';
+    infoDiv.append(form);
+    updateBookHandler(form, id, btn);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function updateToApi(id, updatedBook, btn, form) {
@@ -186,7 +190,7 @@ async function updateToApi(id, updatedBook, btn, form) {
 function updateBookHandler(form, id, btn) {
   form.addEventListener('submit', e => {
     e.preventDefault();
-    saveBtn = document.querySelector('.save_btn');
+    const saveBtn = document.querySelector('.save_btn');
     const year = Number(form.year.value);
     const title = form.bookTitle.value.trim();
     const author = form.author.value.trim();
