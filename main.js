@@ -1,10 +1,5 @@
 const markupLi = (id, title) =>
   `<li id="${id}"><h3>${title}</h3><button data-id="view">View details</button><button class="delete" data-id="del">Delete</button><button data-id="edit">Edit</button></li>`;
-const instance = axios.create({
-  baseURL: 'https://some-domain.com/api/',
-  timeout: 1000,
-  headers: { 'X-Custom-Header': 'foobar' },
-});
 const api = axios.create({
   baseURL: `https://6971cf4a32c6bacb12c49096.mockapi.io/books`,
 });
@@ -56,7 +51,7 @@ async function getBookById(id, btn) {
   }
 }
 // -------------------------- adding listeners for view details and delete buttons --------------------------
-list.addEventListener('click', e => {
+list.addEventListener('click', async e => {
   e.preventDefault();
   if (e.target.nodeName === 'BUTTON') {
     if (e.target.dataset.id === 'view') {
@@ -66,20 +61,13 @@ list.addEventListener('click', e => {
     } else if (e.target.dataset.id === 'del') {
       e.target.textContent = 'Deleting...';
       const id = e.target.parentNode.id;
-      deleteBook(id);
-
-      setTimeout(() => {
-        infoDiv.innerHTML = `<h2>the book was deleted</h2>`;
-      }, 1000);
-      setTimeout(() => (infoDiv.innerHTML = ''), 4000);
+      await deleteBook(id);
+      infoDiv.innerHTML = `<h2>the book was deleted</h2>`;
+      setTimeout(() => (infoDiv.innerHTML = ''), 3000);
     } else if (e.target.dataset.id === 'edit') {
       e.target.textContent = 'Editing...';
       const id = e.target.parentNode.id;
-      try {
-        editBook(id, e.target);
-      } catch (error) {
-        console.log(error);
-      }
+      editBook(id, e.target);
     }
   }
 });
@@ -110,7 +98,7 @@ function newBookHandler(form) {
       alert(error);
       return;
     }
-    const saveBtn = document.querySelector('.save_btn');
+    const saveBtn = form.querySelector('.save_btn');
     saveBtn.textContent = 'saving....';
     const newBook = {
       title: title,
@@ -190,7 +178,7 @@ async function updateToApi(id, updatedBook, btn, form) {
 function updateBookHandler(form, id, btn) {
   form.addEventListener('submit', e => {
     e.preventDefault();
-    const saveBtn = document.querySelector('.save_btn');
+    const saveBtn = form.querySelector('.save_btn');
     const year = Number(form.year.value);
     const title = form.bookTitle.value.trim();
     const author = form.author.value.trim();
