@@ -3,6 +3,9 @@ const markupLi = (id, title) =>
 const api = axios.create({
   baseURL: `https://6971cf4a32c6bacb12c49096.mockapi.io/books`,
 });
+let currentPage = 1;
+let currentLimit = 3;
+
 // -------------------------------render html-----------------------------------------
 const root = document.querySelector('#root');
 const list = document.createElement('ul');
@@ -12,20 +15,36 @@ container.classList.add('container');
 const infoDiv = document.createElement('div');
 infoDiv.classList.add('info');
 root.innerHTML = '<h1 class="title">List of books</h1>';
+const loadMoreBtn = document.createElement('button');
+loadMoreBtn.textContent = 'load more';
+loadMoreBtn.classList.add('load');
+loadMoreBtn.dataset.id = 'loadMore';
 const addBtn = document.createElement('button');
 addBtn.textContent = 'add new book';
-addBtn.classList.add('form_btn');
+addBtn.classList.add('load');
 root.append(container);
-container.append(list, infoDiv, addBtn);
+container.append(list, infoDiv, loadMoreBtn, addBtn);
+
 // ---------------------------------- get Api data + Render books ---------------------------------
 async function renderBooks() {
-  list.innerHTML = '<h2>Loading...</h2>';
+  const listLoader = '<h2 class="loader">Loading...</h2>';
+  list.insertAdjacentHTML('beforeend', listLoader);
   try {
-    const { data } = await api.get('/');
+    const { data } = await api.get(`/`, {
+      params: {
+        page: currentPage,
+        limit: currentLimit,
+      },
+    });
     const books = data.map(({ id, title }) => markupLi(id, title)).join('');
-    list.innerHTML = books;
+    list.insertAdjacentHTML('beforeend', books);
+    if (data.length < currentLimit) {
+      loadMoreBtn.disabled = true;
+    }
   } catch (error) {
     console.log(error);
+  } finally {
+    list.querySelector('.loader')?.remove();
   }
 }
 renderBooks();
@@ -33,6 +52,7 @@ renderBooks();
 const deleteBook = async id => {
   try {
     await api.delete(`/${id}`);
+    reload();
     renderBooks();
   } catch (error) {
     console.log(error);
@@ -70,6 +90,11 @@ list.addEventListener('click', async e => {
       editBook(id, e.target);
     }
   }
+});
+
+loadMoreBtn.addEventListener('click', () => {
+  currentPage += 1;
+  renderBooks();
 });
 // ----------------- adding a new book --------------------
 addBtn.addEventListener('click', () => {
@@ -114,6 +139,7 @@ async function addToApi(newBook, form) {
   try {
     await api.post('/', newBook);
     form.remove();
+    reload();
     renderBooks();
   } catch (error) {
     console.log(error);
@@ -170,6 +196,7 @@ async function updateToApi(id, updatedBook, btn, form) {
     console.log(error);
   } finally {
     btn.textContent = 'Edit';
+    reload();
     renderBooks();
     form.remove();
   }
@@ -198,4 +225,10 @@ function updateBookHandler(form, id, btn) {
 
     updateToApi(id, updatedBook, btn, form);
   });
+}
+
+function reload() {
+  list.innerHTML = '';
+  loadMoreBtn.disabled = false;
+  currentPage = 1;
 }
