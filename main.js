@@ -92,9 +92,11 @@ list.addEventListener('click', async e => {
   }
 });
 
-loadMoreBtn.addEventListener('click', () => {
+loadMoreBtn.addEventListener('click', async () => {
+  loadMoreBtn.style.display = 'none';
   currentPage += 1;
-  renderBooks();
+  await renderBooks();
+  loadMoreBtn.style.display = 'inline';
 });
 // ----------------- adding a new book --------------------
 addBtn.addEventListener('click', () => {
