@@ -3,11 +3,16 @@ const markupLi = (id, title) =>
 const api = axios.create({
   baseURL: `https://6971cf4a32c6bacb12c49096.mockapi.io/books`,
 });
+const markupSearch = `<input type='text' name='search' class='search_input'/><button class='search_btn'>search</button></class=>`;
 let currentPage = 1;
 let currentLimit = 3;
 
 // -------------------------------render html-----------------------------------------
 const root = document.querySelector('#root');
+const searchForm = document.createElement('form');
+searchForm.classList.add('search_form');
+searchForm.innerHTML = markupSearch;
+searchForm.style.display = 'none';
 const list = document.createElement('ul');
 list.classList.add('list');
 const container = document.createElement('div');
@@ -23,7 +28,9 @@ const addBtn = document.createElement('button');
 addBtn.textContent = 'add new book';
 addBtn.classList.add('load');
 root.append(container);
-container.append(list, infoDiv, loadMoreBtn, addBtn);
+container.append(searchForm, list, infoDiv, loadMoreBtn, addBtn);
+
+let search = '';
 
 // ---------------------------------- get Api data + Render books ---------------------------------
 async function renderBooks() {
@@ -34,17 +41,21 @@ async function renderBooks() {
       params: {
         page: currentPage,
         limit: currentLimit,
+        search,
       },
     });
     const books = data.map(({ id, title }) => markupLi(id, title)).join('');
     list.insertAdjacentHTML('beforeend', books);
     if (data.length < currentLimit) {
       loadMoreBtn.disabled = true;
+    } else {
+      loadMoreBtn.disabled = false;
     }
   } catch (error) {
     console.log(error);
   } finally {
     list.querySelector('.loader')?.remove();
+    searchForm.style.display = 'block';
   }
 }
 renderBooks();
@@ -233,4 +244,19 @@ function reload() {
   list.innerHTML = '';
   loadMoreBtn.disabled = false;
   currentPage = 1;
+}
+
+// -------------------------- search -----------------------------
+searchForm.addEventListener('submit', searchHandler);
+
+function searchHandler(e) {
+  e.preventDefault();
+  const form = e.target;
+  search = form.elements.search.value.trim();
+  console.log(search);
+  form.reset();
+  infoDiv.innerHTML = '';
+  list.innerHTML = '';
+  currentPage = 1;
+  renderBooks();
 }
