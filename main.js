@@ -3,34 +3,36 @@ const markupLi = (id, title) =>
 const api = axios.create({
   baseURL: `https://6971cf4a32c6bacb12c49096.mockapi.io/books`,
 });
-const markupSearch = `<input type='text' name='search' class='search_input'/><button class='search_btn'>search</button></class=>`;
+const markupSearch = `<select class='select'><option value='asc'>From A to Z</option><option value='desc'>From Z to A</option></select><input type='text' name='search' class='search_input'/><button class='search_btn'>search</button></class=>`;
 let currentPage = 1;
 let currentLimit = 3;
-
+let search = '';
+let sortOrder = 'asc';
 // -------------------------------render html-----------------------------------------
-const root = document.querySelector('#root');
 const searchForm = document.createElement('form');
+const list = document.createElement('ul');
+const container = document.createElement('div');
+const infoDiv = document.createElement('div');
+const loadMoreBtn = document.createElement('button');
+const addBtn = document.createElement('button');
+// ------------------------------------------------
 searchForm.classList.add('search_form');
+list.classList.add('list');
+container.classList.add('container');
+infoDiv.classList.add('info');
+loadMoreBtn.classList.add('load');
+addBtn.classList.add('load');
+// ------------------------------------------------
+const root = document.querySelector('#root');
 searchForm.innerHTML = markupSearch;
 searchForm.style.display = 'none';
-const list = document.createElement('ul');
-list.classList.add('list');
-const container = document.createElement('div');
-container.classList.add('container');
-const infoDiv = document.createElement('div');
-infoDiv.classList.add('info');
 root.innerHTML = '<h1 class="title">List of books</h1>';
-const loadMoreBtn = document.createElement('button');
 loadMoreBtn.textContent = 'load more';
-loadMoreBtn.classList.add('load');
 loadMoreBtn.dataset.id = 'loadMore';
-const addBtn = document.createElement('button');
 addBtn.textContent = 'add new book';
-addBtn.classList.add('load');
 root.append(container);
 container.append(searchForm, list, infoDiv, loadMoreBtn, addBtn);
-
-let search = '';
+const selectForm = document.querySelector('.select');
 
 // ---------------------------------- get Api data + Render books ---------------------------------
 async function renderBooks() {
@@ -42,6 +44,8 @@ async function renderBooks() {
         page: currentPage,
         limit: currentLimit,
         search,
+        sortBy: 'title',
+        order: sortOrder,
       },
     });
     const books = data.map(({ id, title }) => markupLi(id, title)).join('');
@@ -253,8 +257,19 @@ function searchHandler(e) {
   e.preventDefault();
   const form = e.target;
   search = form.elements.search.value.trim();
-  console.log(search);
   form.reset();
+  infoDiv.innerHTML = '';
+  list.innerHTML = '';
+  currentPage = 1;
+  renderBooks();
+}
+
+// ------------------------order-------------------------------
+selectForm.addEventListener('change', sortHandler);
+
+function sortHandler(e) {
+  e.preventDefault();
+  sortOrder = e.target.value;
   infoDiv.innerHTML = '';
   list.innerHTML = '';
   currentPage = 1;
